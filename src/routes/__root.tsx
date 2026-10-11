@@ -2,6 +2,7 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { profile } from '@/data/profile'
+import { LangProvider } from '@/lib/i18n'
 
 import '../styles.css'
 
@@ -11,36 +12,14 @@ const siteDescription = `${profile.title}. ${profile.tagline}. Projets, expérie
 export const Route = createRootRoute({
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: siteName,
-      },
-      {
-        name: 'description',
-        content: siteDescription,
-      },
-      {
-        property: 'og:title',
-        content: siteName,
-      },
-      {
-        property: 'og:description',
-        content: siteDescription,
-      },
-      {
-        property: 'og:type',
-        content: 'website',
-      },
-      {
-        name: 'twitter:card',
-        content: 'summary_large_image',
-      },
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { title: siteName },
+      { name: 'description', content: siteDescription },
+      { property: 'og:title', content: siteName },
+      { property: 'og:description', content: siteDescription },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     links: [
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -56,14 +35,16 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <LangProvider>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </LangProvider>
         <Scripts />
       </body>
     </html>

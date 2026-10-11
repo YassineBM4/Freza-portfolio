@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { allProjects } from 'content-collections'
-import { ArrowRight, ArrowUpRight, Github, Linkedin, Mail, MapPin, Phone, Download } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Download, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
 import { GitHubSection } from '@/components/GitHubSection'
 import { ContactForm } from '@/components/ContactForm'
-import { experience, img, linkedinPosts, profile, skillGroups } from '@/data/profile'
+import { img, linkedinPosts, useData } from '@/data/profile'
+import { localizeProject } from '@/data/projects-en'
+import { useLang, useT } from '@/lib/i18n'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -22,7 +24,10 @@ function SectionTitle({ index, kicker, title, children }: { index: string; kicke
 }
 
 function Home() {
-  const projects = [...allProjects].sort((a, b) => a.order - b.order)
+  const { lang } = useLang()
+  const t = useT()
+  const { profile, skillGroups, experience } = useData()
+  const projects = [...allProjects].sort((a, b) => a.order - b.order).map((p) => localizeProject(p, lang))
 
   return (
     <main>
@@ -31,7 +36,7 @@ function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.3fr_1fr]">
           <div className="rise">
             <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-line px-4 py-1.5 font-mono text-xs text-mist">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-mint" /> Ouverte aux stages & opportunités
+              <span className="h-2 w-2 animate-pulse rounded-full bg-mint" /> {t.open}
             </p>
             <h1 className="font-display text-5xl leading-[1.05] sm:text-7xl">
               {profile.firstName} <span className="italic text-coral">Besrour</span>
@@ -40,16 +45,16 @@ function Home() {
             <p className="mt-2 font-mono text-sm text-mist">{profile.tagline}</p>
             <div className="mt-10 grid max-w-lg grid-cols-[1.4fr_1fr] gap-3">
               <a href="#projets" className="inline-flex items-center justify-center gap-2 rounded-full bg-coral px-6 py-3.5 font-semibold text-ink transition hover:bg-sun">
-                Voir mes projets <ArrowRight size={18} />
+                {t.seeProjects} <ArrowRight size={18} />
               </a>
               <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
                 <Linkedin size={18} /> LinkedIn
               </a>
-              <a href={profile.cv} download="Emna_Besrour_CV.pdf" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
-                <Download size={18} /> Télécharger mon CV
-              </a>
               <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
                 <Github size={18} /> GitHub
+              </a>
+              <a href={profile.cv} download="Emna_Besrour_CV.pdf" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
+                <Download size={18} /> {t.myCv}
               </a>
             </div>
           </div>
@@ -73,25 +78,25 @@ function Home() {
             </div>
             <div className="absolute -bottom-6 left-6 rounded-2xl border border-line bg-ink-2/95 px-5 py-4 backdrop-blur">
               <p className="font-display text-3xl text-sun">4</p>
-              <p className="text-xs text-mist">projets livrés en 2026, dont 1 stage</p>
+              <p className="text-xs text-mist">{t.delivered}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* À propos */}
+      {/* About */}
       <section id="apropos" className="border-t border-line py-24">
         <div className="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[1fr_1.4fr]">
-          <SectionTitle index="01" kicker="À propos" title="Concevoir, coder, livrer." />
+          <SectionTitle index="01" kicker={t.about.kicker} title={t.about.title} />
           <div className="space-y-5 text-lg leading-relaxed text-mist">
             {profile.about.map((p) => (
               <p key={p}>{p}</p>
             ))}
             <dl className="grid gap-4 pt-6 sm:grid-cols-3">
               {[
-                { k: 'Basée en', v: profile.location },
-                { k: 'Spécialités', v: 'Web · Mobile · Jeux' },
-                { k: 'Disponibilité', v: 'Stages & projets' },
+                { k: t.about.basedIn, v: profile.location },
+                { k: t.about.specialties, v: t.about.specialtiesValue },
+                { k: t.about.availability, v: t.about.availabilityValue },
               ].map((d) => (
                 <div key={d.k} className="rounded-2xl border border-line p-4">
                   <dt className="font-mono text-xs uppercase tracking-wider text-mist">{d.k}</dt>
@@ -103,11 +108,11 @@ function Home() {
         </div>
       </section>
 
-      {/* Compétences */}
+      {/* Skills */}
       <section id="competences" className="border-t border-line bg-ink-2/40 py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <SectionTitle index="02" kicker="Compétences" title="Une boîte à outils polyvalente.">
-            Du gameplay 3D à l'architecture d'applications, en passant par le web full-stack.
+          <SectionTitle index="02" kicker={t.skills.kicker} title={t.skills.title}>
+            {t.skills.intro}
           </SectionTitle>
           <div className="grid gap-5 md:grid-cols-2">
             {skillGroups.map((g) => (
@@ -127,11 +132,11 @@ function Home() {
         </div>
       </section>
 
-      {/* Projets */}
+      {/* Projects */}
       <section id="projets" className="border-t border-line py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <SectionTitle index="03" kicker="Projets" title="Projets sélectionnés.">
-            Une marketplace e-commerce full-stack, une application web Angular réalisée en stage et deux applications mobiles, conçues de bout en bout.
+          <SectionTitle index="03" kicker={t.projects.kicker} title={t.projects.title}>
+            {t.projects.intro}
           </SectionTitle>
           <div className="space-y-10">
             {projects.map((p, i) => (
@@ -160,7 +165,7 @@ function Home() {
                   </div>
                   <div className="mt-auto flex flex-wrap gap-4 pt-8">
                     <Link to="/projets/$slug" params={{ slug: p._meta.path }} className="inline-flex items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-coral">
-                      Étude de cas <ArrowRight size={16} />
+                      {t.projects.caseStudy} <ArrowRight size={16} />
                     </Link>
                     {p.github && (
                       <a href={p.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-mist hover:text-cream">
@@ -175,11 +180,11 @@ function Home() {
         </div>
       </section>
 
-      {/* Expérience */}
+      {/* Experience */}
       <section id="experience" className="border-t border-line bg-ink-2/40 py-24">
         <div className="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[1fr_1.6fr]">
-          <SectionTitle index="04" kicker="Expérience" title="Parcours & réalisations.">
-            Un stage en entreprise et des projets menés de bout en bout, avec des livrables concrets.
+          <SectionTitle index="04" kicker={t.experience.kicker} title={t.experience.title}>
+            {t.experience.intro}
           </SectionTitle>
           <ol className="relative border-l border-line">
             {experience.map((e) => (
@@ -187,7 +192,7 @@ function Home() {
                 <span className="absolute top-1.5 -left-[7px] h-3.5 w-3.5 rounded-full border-2 border-ink bg-coral" />
                 <div className="flex flex-wrap items-center gap-3">
                   <p className="font-mono text-xs text-coral">{e.period}</p>
-                  <span className={`rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${e.kind.startsWith('Expérience') ? 'border-coral bg-coral/10 text-coral' : 'border-line text-mist'}`}>
+                  <span className={`rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${e.kind.startsWith(t.experience.professionalPrefix) ? 'border-coral bg-coral/10 text-coral' : 'border-line text-mist'}`}>
                     {e.kind}
                   </span>
                 </div>
@@ -203,7 +208,7 @@ function Home() {
                 </ul>
                 {'slug' in e && e.slug && (
                   <Link to="/projets/$slug" params={{ slug: e.slug }} className="mt-4 inline-flex items-center gap-1 text-sm text-cream hover:text-coral">
-                    Détails du projet <ArrowRight size={14} />
+                    {t.experience.details} <ArrowRight size={14} />
                   </Link>
                 )}
               </li>
@@ -215,8 +220,8 @@ function Home() {
       {/* LinkedIn */}
       <section id="linkedin" className="border-t border-line py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <SectionTitle index="05" kicker="LinkedIn" title="Ce que je partage.">
-            Mes publications récentes sur LinkedIn, où je présente mes projets à la communauté tech.
+          <SectionTitle index="05" kicker={t.linkedin.kicker} title={t.linkedin.title}>
+            {t.linkedin.intro}
           </SectionTitle>
           <div className="grid gap-5 md:grid-cols-2">
             {linkedinPosts.map((post) => {
@@ -241,7 +246,7 @@ function Home() {
             })}
           </div>
           <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#0a66c2] px-6 py-3 font-semibold text-white transition hover:bg-[#004182]">
-            <Linkedin size={18} /> Se connecter sur LinkedIn
+            <Linkedin size={18} /> {t.linkedin.connect}
           </a>
         </div>
       </section>
@@ -249,7 +254,7 @@ function Home() {
       {/* GitHub */}
       <section id="github" className="border-t border-line bg-ink-2/40 py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <SectionTitle index="06" kicker="GitHub" title="Le code derrière les projets." />
+          <SectionTitle index="06" kicker={t.github.kicker} title={t.github.title} />
           <GitHubSection />
         </div>
       </section>
@@ -258,14 +263,14 @@ function Home() {
       <section id="contact" className="border-t border-line py-24">
         <div className="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[1fr_1.2fr]">
           <div>
-            <SectionTitle index="07" kicker="Contact" title="Travaillons ensemble.">
-              Stage, projet ou simple échange : n'hésitez pas à me contacter.
+            <SectionTitle index="07" kicker={t.contact.kicker} title={t.contact.title}>
+              {t.contact.intro}
             </SectionTitle>
             <ul className="space-y-3">
               {[
-                { icon: Mail, label: 'E-mail', value: profile.email, href: `mailto:${profile.email}` },
-                { icon: Phone, label: 'Téléphone', value: profile.phone, href: profile.phoneHref },
-                { icon: MapPin, label: 'Localisation', value: profile.location },
+                { icon: Mail, label: t.contact.email, value: profile.email, href: `mailto:${profile.email}` },
+                { icon: Phone, label: t.contact.phone, value: profile.phone, href: profile.phoneHref },
+                { icon: MapPin, label: t.contact.location, value: profile.location },
                 { icon: Linkedin, label: 'LinkedIn', value: 'emna-besrour', href: profile.linkedin },
                 { icon: Github, label: 'GitHub', value: `@${profile.githubUser}`, href: profile.github },
               ].map(({ icon: Icon, label, value, href }) => {
