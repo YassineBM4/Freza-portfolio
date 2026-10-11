@@ -1,2 +1,15 @@
-# Local Netlify folder
+# Dependencies
+node_modules
+
+# Build output
+dist
+.output
+.nitro
+
+# Platform folders
 .netlify
+.vercel
+
+# Generated caches
+.tanstack
+.content-collections

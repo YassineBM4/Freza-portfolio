@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { allProjects } from 'content-collections'
-import { ArrowRight, ArrowUpRight, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Github, Linkedin, Mail, MapPin, Phone, Download } from 'lucide-react'
 import { GitHubSection } from '@/components/GitHubSection'
 import { ContactForm } from '@/components/ContactForm'
 import { experience, img, linkedinPosts, profile, skillGroups } from '@/data/profile'
@@ -38,14 +38,17 @@ function Home() {
             </h1>
             <p className="mt-5 text-xl text-cream sm:text-2xl">{profile.title}</p>
             <p className="mt-2 font-mono text-sm text-mist">{profile.tagline}</p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <a href="#projets" className="inline-flex items-center gap-2 rounded-full bg-coral px-6 py-3 font-semibold text-ink transition hover:bg-sun">
+            <div className="mt-10 grid max-w-lg grid-cols-[1.4fr_1fr] gap-3">
+              <a href="#projets" className="inline-flex items-center justify-center gap-2 rounded-full bg-coral px-6 py-3.5 font-semibold text-ink transition hover:bg-sun">
                 Voir mes projets <ArrowRight size={18} />
               </a>
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-3 transition hover:border-coral">
+              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
                 <Linkedin size={18} /> LinkedIn
               </a>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-3 transition hover:border-coral">
+              <a href={profile.cv} download="Emna_Besrour_CV.pdf" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
+                <Download size={18} /> Télécharger mon CV
+              </a>
+              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-3.5 transition hover:border-coral">
                 <Github size={18} /> GitHub
               </a>
             </div>

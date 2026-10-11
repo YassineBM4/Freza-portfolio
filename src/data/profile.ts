@@ -1,4 +1,3 @@
-// Single source of truth for personal info shown across the portfolio.
 export const profile = {
   name: 'Emna Besrour',
   firstName: 'Emna',
@@ -10,6 +9,7 @@ export const profile = {
   phoneHref: 'tel:+21694599159',
   linkedin: 'https://www.linkedin.com/in/emna-besrour-1938a6418/',
   github: 'https://github.com/emnabesrour',
+  cv: '/Emna_Besrour_CV.pdf',
   githubUser: 'emnabesrour',
   about: [
     "Étudiante en génie informatique, je conçois des expériences numériques complètes — du gameplay d'un jeu 3D mobile jusqu'à l'architecture d'une application éducative multi-écrans, en passant par une marketplace e-commerce multivendeur et une application web Angular réalisée en stage chez Poulina Group Holding.",
@@ -119,7 +119,4 @@ export const linkedinPosts = [
   },
 ]
 
-export const img = (src: string, w: number) =>
-  import.meta.env.DEV
-    ? src
-    : `/.netlify/images?url=${encodeURIComponent(src)}&w=${w}&fm=webp`
+export const img = (src: string, _w: number) => src
